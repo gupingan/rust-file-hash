@@ -2,6 +2,7 @@ mod cli;
 mod hasher;
 
 use anyhow::{Context, Result};
+use chrono::Local;
 use clap::Parser;
 use colored::Colorize;
 use glob::glob;
@@ -527,24 +528,12 @@ fn export_checksum_file(
     format: &OutputFormat,
 ) -> Result<()> {
     use std::io::Write;
-    use std::time::{SystemTime, UNIX_EPOCH};
 
     let mut file = std::fs::File::create(output_path)
         .with_context(|| format!("无法创建校验文件: {}", output_path.display()))?;
 
     // 获取当前时间
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default();
-    let datetime = format!(
-        "{}年{}月{}日 {:02}:{:02}:{:02}",
-        1970 + now.as_secs() / 31_536_000,
-        (now.as_secs() % 31_536_000) / 2_628_000 + 1,
-        (now.as_secs() % 2_628_000) / 86_400 + 1,
-        (now.as_secs() % 86_400) / 3600,
-        (now.as_secs() % 3600) / 60,
-        now.as_secs() % 60
-    );
+    let datetime = Local::now().format("%Y年%m月%d日 %H:%M:%S").to_string();
 
     // 计算输出文件的父目录作为基准路径
     let base_dir: &Path = if output_path.is_absolute() {

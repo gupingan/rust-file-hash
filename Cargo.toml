@@ -1,6 +1,6 @@
 [package]
 name = "rfhash"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 authors = ["gupingan <gupingan6@outlook.com>"]
 description = "高性能文件哈希计算器 - 支持多种算法、内存映射、并行处理"
@@ -19,6 +19,7 @@ colored = "2.1"
 anyhow = "1.0"
 hex = "0.4"
 glob = "0.3"
+chrono = "0.4"
 
 [profile.release]
 opt-level = 3
